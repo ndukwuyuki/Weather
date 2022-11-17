@@ -12,8 +12,7 @@ import CoreLocation
 class Forecast {
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
-    private(set) var dailyWeather: [DailyWeather] = []
-    private(set) var hourlyWeather: [HourlyWeather] = []
+    private(set) var weather: [Weather: [Weather]] = [:]
     let dailyUnits: [String : String]
     let hourlyUnits: [String : String]
     
@@ -32,11 +31,14 @@ class Forecast {
         self.dailyUnits = dailyUnits
         self.hourlyUnits = hourlyUnits
         
-        dailyWeather = parseDailyWeather(dailyDictionary: dailyDictionary, humidityArray: humidityArray)
-        hourlyWeather = parseHourlyWeather(hourlyDictionary: hourlyDictionary)
+        let dailyWeather = parseDailyWeather(dailyDictionary: dailyDictionary,
+                                         humidityArray: humidityArray)
+        let hourlyWeather = parseHourlyWeather(hourlyDictionary: hourlyDictionary)
+        
+        weather = parseWeatherDictionary(dailyWeather: dailyWeather, hourlyWeather: hourlyWeather)
     }
     
-    private func parseDailyWeather(dailyDictionary: [String : JSON], humidityArray: [Int]) -> [DailyWeather] {
+    private func parseDailyWeather(dailyDictionary: [String : JSON], humidityArray: [Int]) -> [Weather] {
         guard let dailyTimeArray = dailyDictionary[ResponseParams.time.rawValue]?.array?.map({ $0.stringValue }),
               let minTemperatureArray = dailyDictionary[ResponseParams.minTemperature.rawValue]?.array?.map({ $0.floatValue }),
               let maxTemperatureArray = dailyDictionary[ResponseParams.maxTemperature.rawValue]?.array?.map({ $0.floatValue }),
@@ -45,7 +47,7 @@ class Forecast {
               let weathercodeArray = dailyDictionary[ResponseParams.weatherCode.rawValue]?.array?.map({ $0.intValue })
         else { return [] }
         
-        var array: [DailyWeather] = []
+        var array: [Weather] = []
         
         for index in 0 ..< dailyTimeArray.count {
             let startIndex = index * 24
@@ -54,12 +56,18 @@ class Forecast {
             else { break }
             let windDirection = WindDirection.getWindDirectionBy(degrees: windDirectionArray[index])
             let weatherType = WeatherType.weatherTypeBy(weathercode: weathercodeArray[index])
-            array.append(DailyWeather(time: dailyTimeArray[index], windDirection: windDirection, windSpeed: windSpeedArray[index], weatherType: weatherType, humidity: maxHumidity, maxTemperature: maxTemperatureArray[index], minTemperature: minTemperatureArray[index]))
+            array.append(Weather(time: dailyTimeArray[index],
+                                 windDirection: windDirection,
+                                 windSpeed: windSpeedArray[index],
+                                 weatherType: weatherType,
+                                 maxTemperature: maxTemperatureArray[index],
+                                 minTemperature: minTemperatureArray[index],
+                                 humidity: maxHumidity))
         }
         return array
     }
     
-    private func parseHourlyWeather(hourlyDictionary: [String: JSON]) -> [HourlyWeather] {
+    private func parseHourlyWeather(hourlyDictionary: [String: JSON]) -> [Weather] {
         guard let timeArray = hourlyDictionary[ResponseParams.time.rawValue]?.array?.map({ $0.stringValue }),
               let temperatureArray = hourlyDictionary[ResponseParams.temperature.rawValue]?.array?.map({ $0.floatValue }),
               let windDirectionArray = hourlyDictionary[ResponseParams.windDirection.rawValue]?.array?.map({ $0.floatValue }),
@@ -67,12 +75,12 @@ class Forecast {
               let weathercodeArray = hourlyDictionary[ResponseParams.weatherCode.rawValue]?.array?.map({ $0.intValue })
         else { return [] }
               
-        var array: [HourlyWeather] = []
+        var array: [Weather] = []
         
         for index in 0 ..< timeArray.count {
             let windDirection = WindDirection.getWindDirectionBy(degrees: windDirectionArray[index])
             let weatherType = WeatherType.weatherTypeBy(weathercode: weathercodeArray[index])
-            array.append(HourlyWeather(time: timeArray[index],
+            array.append(Weather(time: timeArray[index],
                                        windDirection: windDirection,
                                        windSpeed: windSpeedArray[index],
                                        weatherType: weatherType,
@@ -80,6 +88,19 @@ class Forecast {
         }
         
         return array
+    }
+    
+    private func parseWeatherDictionary(dailyWeather: [Weather], hourlyWeather: [Weather]) -> [Weather : [Weather]]
+    {
+        
+        let countOfHours = hourlyWeather.count/dailyWeather.count
+        var dictionary: [Weather: [Weather]] = [:]
+        for index in 0..<dailyWeather.count {
+            let startIndex = index * countOfHours
+            let endIndex = startIndex + countOfHours - 1
+            dictionary[dailyWeather[index]] = Array(hourlyWeather[startIndex ... endIndex])
+        }
+        return dictionary
     }
     
 }

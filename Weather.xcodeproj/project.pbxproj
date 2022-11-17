@@ -46,12 +46,6 @@
 		CCB0108E292521E0002DBF55 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0108D292521E0002DBF55 /* Forecast.swift */; };
 		CCB0108F292521E0002DBF55 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0108D292521E0002DBF55 /* Forecast.swift */; };
 		CCB01090292521E0002DBF55 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0108D292521E0002DBF55 /* Forecast.swift */; };
-		CCB010922925227C002DBF55 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB010912925227C002DBF55 /* HourlyWeather.swift */; };
-		CCB010932925227C002DBF55 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB010912925227C002DBF55 /* HourlyWeather.swift */; };
-		CCB010942925227C002DBF55 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB010912925227C002DBF55 /* HourlyWeather.swift */; };
-		CCB0109629252286002DBF55 /* DailyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109529252286002DBF55 /* DailyWeather.swift */; };
-		CCB0109729252286002DBF55 /* DailyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109529252286002DBF55 /* DailyWeather.swift */; };
-		CCB0109829252286002DBF55 /* DailyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109529252286002DBF55 /* DailyWeather.swift */; };
 		CCB0109A29252308002DBF55 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109929252308002DBF55 /* Weather.swift */; };
 		CCB0109B29252308002DBF55 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109929252308002DBF55 /* Weather.swift */; };
 		CCB0109C29252308002DBF55 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB0109929252308002DBF55 /* Weather.swift */; };
@@ -103,8 +97,6 @@
 		CCB0108529241638002DBF55 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		CCB010892924DC3C002DBF55 /* GeolocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeolocationService.swift; sourceTree = "<group>"; };
 		CCB0108D292521E0002DBF55 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
-		CCB010912925227C002DBF55 /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
-		CCB0109529252286002DBF55 /* DailyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeather.swift; sourceTree = "<group>"; };
 		CCB0109929252308002DBF55 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		D117448A7A484F44AD29368B /* Pods-Weather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.release.xcconfig"; path = "Target Support Files/Pods-Weather/Pods-Weather.release.xcconfig"; sourceTree = "<group>"; };
 		D336B4BE39860F81945A3645 /* Pods_Weather_WeatherUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Weather_WeatherUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,8 +222,6 @@
 				CC9D9F6E2923CE5600AD34F5 /* WeatherType.swift */,
 				CC9D9F722923CE5F00AD34F5 /* WindDirection.swift */,
 				CCB0108D292521E0002DBF55 /* Forecast.swift */,
-				CCB010912925227C002DBF55 /* HourlyWeather.swift */,
-				CCB0109529252286002DBF55 /* DailyWeather.swift */,
 				CCB0109929252308002DBF55 /* Weather.swift */,
 			);
 			path = Models;
@@ -535,7 +525,6 @@
 				CCB0108629241638002DBF55 /* WeatherViewController.swift in Sources */,
 				CC9D9F672923CD8B00AD34F5 /* ImageFactory.swift in Sources */,
 				CCB0107A2924117C002DBF55 /* TodayWeatherView.swift in Sources */,
-				CCB0109629252286002DBF55 /* DailyWeather.swift in Sources */,
 				CC9D9F2F2923CBF700AD34F5 /* AppDelegate.swift in Sources */,
 				CC9D9F652923CCF100AD34F5 /* NetworkService.swift in Sources */,
 				CCB0109A29252308002DBF55 /* Weather.swift in Sources */,
@@ -544,7 +533,6 @@
 				CC9D9F6B2923CE0400AD34F5 /* ViewControllersFactory.swift in Sources */,
 				CC9D9F6F2923CE5600AD34F5 /* WeatherType.swift in Sources */,
 				CC9D9F732923CE5F00AD34F5 /* WindDirection.swift in Sources */,
-				CCB010922925227C002DBF55 /* HourlyWeather.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,14 +544,12 @@
 				CC9D9F702923CE5600AD34F5 /* WeatherType.swift in Sources */,
 				CCB0108729241638002DBF55 /* WeatherViewController.swift in Sources */,
 				CC9D9F742923CE5F00AD34F5 /* WindDirection.swift in Sources */,
-				CCB0109729252286002DBF55 /* DailyWeather.swift in Sources */,
 				CC9D9F682923CD8B00AD34F5 /* ImageFactory.swift in Sources */,
 				CCB0109B29252308002DBF55 /* Weather.swift in Sources */,
 				CC9D9F462923CBF800AD34F5 /* WeatherTests.swift in Sources */,
 				CCB0108329241289002DBF55 /* AppCoordinator.swift in Sources */,
 				CC9D9F6C2923CE0400AD34F5 /* ViewControllersFactory.swift in Sources */,
 				CCB0107B2924117C002DBF55 /* TodayWeatherView.swift in Sources */,
-				CCB010932925227C002DBF55 /* HourlyWeather.swift in Sources */,
 				CCB0108F292521E0002DBF55 /* Forecast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -581,8 +567,6 @@
 				CCB0108C2924DC3C002DBF55 /* GeolocationService.swift in Sources */,
 				CC9D9F502923CBF800AD34F5 /* WeatherUITests.swift in Sources */,
 				CC9D9F522923CBF800AD34F5 /* WeatherUITestsLaunchTests.swift in Sources */,
-				CCB0109829252286002DBF55 /* DailyWeather.swift in Sources */,
-				CCB010942925227C002DBF55 /* HourlyWeather.swift in Sources */,
 				CC9D9F712923CE5600AD34F5 /* WeatherType.swift in Sources */,
 				CCB0108429241289002DBF55 /* AppCoordinator.swift in Sources */,
 				CC9D9F752923CE5F00AD34F5 /* WindDirection.swift in Sources */,
