@@ -5,6 +5,9 @@ use_frameworks!
 def pods
    pod 'Alamofire'
    pod 'SwiftyJSON'
+   pod 'RxSwift'
+   pod 'RxCocoa'
+   pod 'SnapKit'
 end
 
 target 'Weather' do

@@ -9,25 +9,27 @@ import Foundation
 
 class Weather {
     private(set) var id = UUID()
-    private let time: String
-    private let windDirection: WindDirection
-    private let windSpeed: Float
-    private let weatherType: WeatherType
-    private let temperature: Float?
-    private let maxTemperature: Float?
-    private let minTemperature: Float?
-    private let humidity: Int?
+    let date: Date
+    let windDirection: WindDirection
+    let windSpeed: Float
+    let weatherType: WeatherType
+    let temperature: Float?
+    let maxTemperature: Float?
+    let minTemperature: Float?
+    let humidity: Int?
+    let weatherUnits: WeatherUnits
     
-    init(time: String,
+    init(date: Date,
          windDirection: WindDirection,
          windSpeed: Float,
          weatherType: WeatherType,
          temperature: Float? = nil,
          maxTemperature: Float? = nil,
          minTemperature: Float? = nil,
-         humidity: Int? = nil) {
+         humidity: Int? = nil,
+         weatherUnits: WeatherUnits) {
         self.id = UUID()
-        self.time = time
+        self.date = date
         self.windDirection = windDirection
         self.windSpeed = windSpeed
         self.weatherType = weatherType
@@ -35,10 +37,16 @@ class Weather {
         self.maxTemperature = maxTemperature
         self.minTemperature = minTemperature
         self.humidity = humidity
+        self.weatherUnits = weatherUnits
     }
+    
 }
 
-extension Weather: Identifiable, Hashable {
+extension Weather: Identifiable, Hashable, Comparable {
+    static func < (lhs: Weather, rhs: Weather) -> Bool {
+        return lhs.date < rhs.date
+    }
+    
     func hash(into hasher: inout Hasher) {
         return hasher.combine(id)
     }

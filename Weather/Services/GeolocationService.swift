@@ -14,7 +14,7 @@ class GeolocationService {
     fileprivate init() { }
     
     func getCoordinatesForCity(_ cityName: String, completionHandler: @escaping (CLLocationCoordinate2D?, TimeZone?) -> Void) {
-        CLGeocoder().geocodeAddressString("London") { placemark, _ in
+        CLGeocoder().geocodeAddressString(cityName) { placemark, _ in
             completionHandler(placemark?.first?.location?.coordinate, placemark?.first?.timeZone)
         }
     }

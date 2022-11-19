@@ -19,6 +19,7 @@ class AppCoordinator {
         let navigationController = ViewControllersFactory.navigationController
         let weatherViewController = ViewControllersFactory.weatherViewController
         navigationController.setViewControllers([weatherViewController], animated: false)
+        navigationController.setNavigationBarHidden(true, animated: false)
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
