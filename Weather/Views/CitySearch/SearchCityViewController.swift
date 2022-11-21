@@ -35,13 +35,14 @@ class SearchCityViewController: UIViewController {
     
     private func configureNavigationBar() {
         navigationItem.titleView = citySearchBar
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: ImageFactory.backImage?.withTintColor(.white), style: .plain, target: self, action: #selector(SearchCityViewController.backButtonTapped))
     }
     
     private func configureCityTextField() {
         citySearchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: navigationController?.navigationBar.frame.width ?? 0, height: 40))
         citySearchBar.searchTextField.font = UIConstants.font
-        citySearchBar.layer.cornerRadius = 3
-        citySearchBar.layer.masksToBounds = true
+        citySearchBar.searchTextField.borderStyle = .roundedRect
+        citySearchBar.searchTextField.backgroundColor = .white
     }
     
     private func configureResultsTableView() {
@@ -78,19 +79,10 @@ class SearchCityViewController: UIViewController {
         resultsTableView.rx.modelSelected(CityViewModel.self).bind(to: viewModel.selectedCity).disposed(by: disposeBag)
     }
     
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc private func backButtonTapped() {
+        coordinator?.back()
     }
-    */
-
+    
 }
 
 extension SearchCityViewController: UITableViewDelegate {

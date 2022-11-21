@@ -30,4 +30,9 @@ class SearchCityCoordinator: Coordinator, SearchCityCoordinatorInput {
         navigationController.popViewController(animated: true)
     }
     
+    func back() {
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.popViewController(animated: true)
+    }
+    
 }

@@ -9,39 +9,53 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import RxSwift
+import CoreLocation
 
 class NetworkService {
     static let shared = NetworkService()
     
     fileprivate init() { }
     
-    func getDailyWeather(for cityName: String,
-                         completionHandler: @escaping (City?, Forecast?, Error?) -> Void) {
-        GeolocationService.shared.getCoordinatesForCity(cityName) {[weak self] coordinate, timezone, city in
-            guard let coordinate = coordinate,
-                  let timezone = timezone,
-                  let url = URL(string: OpenMeteoConstants.baseURL)
-            else { return }
-            
-            var params : [String : Any] = [
-                OpenMeteoConstants.ParametersName.latitude.rawValue : coordinate.latitude,
-                OpenMeteoConstants.ParametersName.longitude.rawValue : coordinate.longitude,
-                OpenMeteoConstants.ParametersName.timezone.rawValue : timezone.identifier
-            ]
-            
-            self?.addWeatherParams(&params)
-            
-            AF.request(url, method: .get, parameters: params).responseJSON { response in
-                let json = JSON(response.value as Any)
-                
-                do {
-                    let forecast = try Forecast(json: json)
-                    completionHandler(city, forecast, nil)
-                } catch {
-                    completionHandler(city, nil, error)
-                }
+    func getForecast(for location: Location,
+                     completion: @escaping (City?, Forecast?, Error?) -> Void) {
+        switch location {
+        case .cityName(let cityName):
+            GeolocationService.shared.getCoordinatesForCity(cityName) {[weak self] coordinate, timezone, city in
+                self?.getForecast(coordinate: coordinate, timezone: timezone, city: city, completion: completion)
             }
+        case .coordinate(let coordinate):
+            GeolocationService.shared.getCityForCoordinates(coordinate) {[weak self] coordinate, timezone, city in
+                self?.getForecast(coordinate: coordinate, timezone: timezone, city: city, completion: completion)
+            }
+        }
+    }
+    
+    private func getForecast(coordinate: CLLocationCoordinate2D?,
+                     timezone: TimeZone?,
+                     city: City?,
+                     completion:  @escaping (City?, Forecast?, Error?) -> Void) {
+        guard let coordinate = coordinate,
+              let timezone = timezone,
+              let url = URL(string: OpenMeteoConstants.baseURL)
+        else { return }
+        
+        var params : [String : Any] = [
+            OpenMeteoConstants.ParametersName.latitude.rawValue : coordinate.latitude,
+            OpenMeteoConstants.ParametersName.longitude.rawValue : coordinate.longitude,
+            OpenMeteoConstants.ParametersName.timezone.rawValue : timezone.identifier
+        ]
+        
+        addWeatherParams(&params)
+        
+        AF.request(url, method: .get, parameters: params).responseJSON { response in
+            let json = JSON(response.value as Any)
             
+            do {
+                let forecast = try Forecast(json: json)
+                completion(city, forecast, nil)
+            } catch {
+                completion(city, nil, error)
+            }
         }
     }
     
@@ -97,4 +111,9 @@ enum ResponseParams: String {
     case windDirection = "winddirection_10m"
     case maxWindSpeed = "windspeed_10m_max"
     case dominantWindDirection = "winddirection_10m_dominant"
+}
+
+enum Location {
+    case cityName(String)
+    case coordinate(CLLocationCoordinate2D)
 }

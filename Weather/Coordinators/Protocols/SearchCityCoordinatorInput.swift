@@ -9,4 +9,5 @@ import Foundation
 
 protocol SearchCityCoordinatorInput {
     func didChangeCity(to city: CityViewModel)
+    func back()
 }

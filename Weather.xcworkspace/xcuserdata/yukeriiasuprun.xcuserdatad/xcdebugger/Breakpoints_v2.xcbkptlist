@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "58989E1A-E827-4598-B63B-65A81892B27B"
+            uuid = "9DABAE7F-B58C-44A7-BF42-64005AEE6F20"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Weather/Coordinators/AppCoordinator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "didTapChangeLocation()"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "locationChanged(to:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

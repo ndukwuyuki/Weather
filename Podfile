@@ -8,6 +8,7 @@ def pods
    pod 'RxSwift'
    pod 'RxCocoa'
    pod 'SnapKit'
+   pod 'LMGeocoder'
 end
 
 target 'Weather' do

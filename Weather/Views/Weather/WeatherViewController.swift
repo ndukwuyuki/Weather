@@ -96,10 +96,11 @@ class WeatherViewController: UIViewController {
         cityNameObserver.delegate = self
         selectedWeatherObserver.delegate = self
         viewModel?.city.subscribe(cityNameObserver).disposed(by: disposeBag)
-        viewModel?.observerForSelectedWeather().subscribe(selectedWeatherObserver).disposed(by: disposeBag)
+        viewModel?.selectedWeather.subscribe(selectedWeatherObserver).disposed(by: disposeBag)
     }
     
     private func bindHourlyWeatherCollectionView() {
+        
         guard let hourlyWeatherCollectionView = hourlyWeatherCollectionView else { return }
         hourlyWeatherCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
         viewModel?.hourlyWeather.bind(to: hourlyWeatherCollectionView.rx.items(cellIdentifier: "HourlyWeatherCollectionViewCell", cellType: HourlyWeatherCollectionViewCell.self)) { (row, item, cell) in

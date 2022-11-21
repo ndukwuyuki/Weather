@@ -18,12 +18,6 @@ class SearchCityViewModel {
     
     lazy var searchValueObservable = searchValue.asObservable()
     private let disposeBag = DisposeBag()
-//    var observer: Observable<String> {
-//        return searchValue.do { [weak self] cityName in
-//            let filteredCities = (self?.allCities ?? []).filter({ $0.cityName.contains(cityName)})
-//            self?.filteredCities.onNext(filteredCities)
-//        }
-//    }
     
     init() {
         AutocompletionService.shared.delegate = self

@@ -27,6 +27,12 @@ class ViewControllersFactory {
         return viewController
     }
     
+    class var mapViewController: MapViewController {
+        let viewController = MapViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }
+    
 }
 
 private struct UIConstants {

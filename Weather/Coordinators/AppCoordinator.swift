@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class AppCoordinator: Coordinator, AppCoordinatorInput {
     
@@ -37,7 +38,9 @@ class AppCoordinator: Coordinator, AppCoordinatorInput {
     }
         
     func didTapChangeLocation() {
-        print("change location")
+        let mapCoordinator = MapCoordinator(navigationController: navigationController)
+        mapCoordinator.delegate = self
+        mapCoordinator.start()
     }
     
 }
@@ -45,5 +48,11 @@ class AppCoordinator: Coordinator, AppCoordinatorInput {
 extension AppCoordinator: SearchCityCoordinatorDelegate {
     func cityChanged(to city: String) {
         viewModel.fetchForecast(for: city)
+    }
+}
+
+extension AppCoordinator: MapCoordinatorDelegate {
+    func locationChanged(to coordinate: CLLocationCoordinate2D) {
+        viewModel.fetchForecast(for: coordinate)
     }
 }

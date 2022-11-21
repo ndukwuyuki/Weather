@@ -7,6 +7,8 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
+import CoreLocation
 
 final class ForecastViewModel {
     
@@ -14,11 +16,35 @@ final class ForecastViewModel {
     let dailyWeather = BehaviorSubject(value: [WeatherViewModel]())
     let hourlyWeather = BehaviorSubject(value: [WeatherViewModel]())
     let selectedWeather = PublishSubject<WeatherViewModel>()
+    var selectedWeatherDriver: Driver<WeatherViewModel> {
+        return selectedWeather.asDriver { _ in return .empty()}
+    }
     
     private var forecast: Forecast?
+    private let disposeBag = DisposeBag()
+    
+    init() {
+        selectedWeatherDriver.drive (onNext: { [weak self] viewModel in
+            guard let hourlyWeatherArray = self?.forecast?.weather.filter({ $0.key.id == viewModel.id }).first?.value
+            else {
+                self?.hourlyWeather.on(.error(NSError()))
+                return
+            }
+            let hourlyWeatherViewModels = hourlyWeatherArray.map { WeatherViewModel(weather: $0) }
+            self?.hourlyWeather.on(.next(hourlyWeatherViewModels))
+        }).disposed(by: disposeBag)
+    }
     
     func fetchForecast(for city: String) {
-        NetworkService.shared.getDailyWeather(for: city) { [weak self] city, forecast, error in
+        fetchForecast(for: .cityName(city))
+    }
+    
+    func fetchForecast(for coordinate: CLLocationCoordinate2D) {
+        fetchForecast(for: .coordinate(coordinate))
+    }
+    
+    private func fetchForecast(for location: Location) {
+        NetworkService.shared.getForecast(for: location) { [weak self] city, forecast, error in
             if let city = city {
                 self?.city.onNext(CityViewModel(city: city))
             }
@@ -44,17 +70,5 @@ final class ForecastViewModel {
             }
             
         }
-    }
-    
-    func observerForSelectedWeather() -> Observable<WeatherViewModel> {
-        return selectedWeather.do(onNext: { [weak self] viewModel in
-            guard let hourlyWeatherArray = self?.forecast?.weather.filter({ $0.key.id == viewModel.id }).first?.value
-            else {
-                self?.hourlyWeather.on(.error(NSError()))
-                return
-            }
-            let hourlyWeatherViewModels = hourlyWeatherArray.map { WeatherViewModel(weather: $0) }
-            self?.hourlyWeather.on(.next(hourlyWeatherViewModels))
-        })
     }
 }
