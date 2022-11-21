@@ -11,6 +11,8 @@ import RxCocoa
 import SnapKit
 
 class WeatherViewController: UIViewController {
+    var coordinator: AppCoordinatorInput?
+    var viewModel: ForecastViewModel?
     
     private let selectedWeatherObserver = SelectedWeatherObserver()
     private let cityNameObserver = CityNameObserver()
@@ -19,14 +21,12 @@ class WeatherViewController: UIViewController {
     private var hourlyWeatherCollectionView: UICollectionView?
     private var selectedWeatherView: SelectedWeatherView?
     
-    private var viewModel = ForecastViewModel()
     private var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
-        viewModel.fetchForecast(for: "Каїр")
-        // Do any additional setup after loading the view.
+        viewModel?.fetchForecast(for: "London")
     }
     
     private func configureSubviews() {
@@ -42,6 +42,7 @@ class WeatherViewController: UIViewController {
         selectedWeatherView = SelectedWeatherView(frame: view.frame)
         selectedWeatherView?.translatesAutoresizingMaskIntoConstraints = false
         selectedWeatherView?.backgroundColor = UIConstants.selectedWeatherBackgroundColor
+        selectedWeatherView?.delegate = self
         guard let selectedWeatherView = selectedWeatherView else { return }
         
         view.addSubview(selectedWeatherView)
@@ -94,14 +95,14 @@ class WeatherViewController: UIViewController {
     private func bindSelectedWeather() {
         cityNameObserver.delegate = self
         selectedWeatherObserver.delegate = self
-        viewModel.city.subscribe(cityNameObserver).disposed(by: disposeBag)
-        viewModel.selectedWeather.subscribe(selectedWeatherObserver).disposed(by: disposeBag)
+        viewModel?.city.subscribe(cityNameObserver).disposed(by: disposeBag)
+        viewModel?.observerForSelectedWeather().subscribe(selectedWeatherObserver).disposed(by: disposeBag)
     }
     
     private func bindHourlyWeatherCollectionView() {
         guard let hourlyWeatherCollectionView = hourlyWeatherCollectionView else { return }
         hourlyWeatherCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
-        viewModel.hourlyWeather.bind(to: hourlyWeatherCollectionView.rx.items(cellIdentifier: "HourlyWeatherCollectionViewCell", cellType: HourlyWeatherCollectionViewCell.self)) { (row, item, cell) in
+        viewModel?.hourlyWeather.bind(to: hourlyWeatherCollectionView.rx.items(cellIdentifier: "HourlyWeatherCollectionViewCell", cellType: HourlyWeatherCollectionViewCell.self)) { (row, item, cell) in
             cell.time = item.time
             cell.weatherImage = item.weatherType
             cell.temperature = item.temperature
@@ -111,7 +112,7 @@ class WeatherViewController: UIViewController {
     private func bindDailyWeatherTableView() {
         guard let dailyWeatherTableView = dailyWeatherTableView else { return }
         dailyWeatherTableView.rx.setDelegate(self).disposed(by: disposeBag)
-        viewModel.dailyWeather.bind(to: dailyWeatherTableView.rx.items(cellIdentifier: "DailyWeatherTableViewCell", cellType: UITableViewCell.self)) { (row, viewModel,cell ) in
+        viewModel?.dailyWeather.bind(to: dailyWeatherTableView.rx.items(cellIdentifier: "DailyWeatherTableViewCell", cellType: UITableViewCell.self)) { (row, viewModel,cell ) in
             guard let cell = cell as? DailyWeatherTableViewCell else { return }
             cell.isTopCell = row == 0
             cell.weekday = viewModel.weekday
@@ -119,17 +120,8 @@ class WeatherViewController: UIViewController {
             cell.weatherImage = viewModel.weatherType
         }.disposed(by: disposeBag)
         
-        dailyWeatherTableView.rx.modelSelected(WeatherViewModel.self).subscribe { [weak self] event in
-            switch event {
-            case .next(let model):
-                self?.viewModel.setSelectedWeather(selectedWeather: model)
-                self?.hourlyWeatherCollectionView?.setContentOffset(CGPoint.zero, animated: true)
-            case .error(let error):
-                print(error)
-            case .completed:
-                print("completed")
-            }
-        }.disposed(by: disposeBag)
+        guard let viewModel = viewModel else { return }
+        dailyWeatherTableView.rx.modelSelected(WeatherViewModel.self).bind(to: viewModel.selectedWeather).disposed(by: disposeBag)
         
     }
     
@@ -148,6 +140,17 @@ extension WeatherViewController: UITableViewDelegate {
 }
 
 extension WeatherViewController: UICollectionViewDelegate {
+    
+}
+
+extension WeatherViewController: SelectedWeatherViewDelegate {
+    func didTapOnCity() {
+        coordinator?.didTapChangeCity()
+    }
+    
+    func didTapOnLocation() {
+        coordinator?.didTapChangeLocation()
+    }
     
 }
 

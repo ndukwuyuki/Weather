@@ -10,6 +10,7 @@ import Foundation
 class Weather {
     private(set) var id = UUID()
     let date: Date
+    let timezone: TimeZone?
     let windDirection: WindDirection
     let windSpeed: Float
     let weatherType: WeatherType
@@ -20,6 +21,7 @@ class Weather {
     let weatherUnits: WeatherUnits
     
     init(date: Date,
+         timezone: TimeZone?,
          windDirection: WindDirection,
          windSpeed: Float,
          weatherType: WeatherType,
@@ -30,6 +32,7 @@ class Weather {
          weatherUnits: WeatherUnits) {
         self.id = UUID()
         self.date = date
+        self.timezone = timezone
         self.windDirection = windDirection
         self.windSpeed = windSpeed
         self.weatherType = weatherType

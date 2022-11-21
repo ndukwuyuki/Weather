@@ -69,6 +69,7 @@ class Forecast {
             let windDirection = WindDirection.getWindDirectionBy(degrees: windDirectionArray[index])
             let weatherType = WeatherType.weatherTypeBy(weathercode: weathercodeArray[index])
             array.append(Weather(date: date,
+                                 timezone: TimeZone(identifier: timezoneIdentifier),
                                  windDirection: windDirection,
                                  windSpeed: windSpeedArray[index],
                                  weatherType: weatherType,
@@ -100,6 +101,7 @@ class Forecast {
             let windDirection = WindDirection.getWindDirectionBy(degrees: windDirectionArray[index])
             let weatherType = WeatherType.weatherTypeBy(weathercode: weathercodeArray[index])
             array.append(Weather(date: date,
+                                 timezone: TimeZone(identifier: timezoneIdentifier),
                                  windDirection: windDirection,
                                  windSpeed: windSpeedArray[index],
                                  weatherType: weatherType,

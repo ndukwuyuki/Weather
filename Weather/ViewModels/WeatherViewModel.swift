@@ -29,6 +29,7 @@ struct WeatherViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E"
         dateFormatter.locale = Locale(identifier: "uk_UA")
+        dateFormatter.timeZone = weather.timezone
         dateFormatter.shortWeekdaySymbols = dateFormatter.shortWeekdaySymbols.map({ $0.localizedUppercase })
         let dateString = dateFormatter.string(from: date)
         return dateString
@@ -38,6 +39,7 @@ struct WeatherViewModel {
         let font = UIFont(name: "CourierNewPS-BoldMT", size: 22) ?? UIFont.systemFont(ofSize: 22)
         let fontSuper = UIFont(name: "CourierNewPS-BoldMT", size: 14) ?? UIFont.systemFont(ofSize: 14)
         let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = weather.timezone
         dateFormatter.dateFormat = "HHmm"
         let dateString = dateFormatter.string(from: weather.date)
         let attrDate = NSMutableAttributedString(string: dateString, attributes: [.font: font])

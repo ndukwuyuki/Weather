@@ -15,10 +15,10 @@ protocol CityNameObserverDelegate {
 class CityNameObserver: ObserverType {
     var delegate: CityNameObserverDelegate?
     
-    func on(_ event: RxSwift.Event<String>) {
+    func on(_ event: RxSwift.Event<CityViewModel>) {
         switch event {
-        case .next(let cityName):
-            delegate?.cityNameChanged(to: cityName)
+        case .next(let city):
+            delegate?.cityNameChanged(to: city.cityName)
         case .error(let error):
             print(error)
         case .completed:
@@ -26,5 +26,5 @@ class CityNameObserver: ObserverType {
         }
     }
     
-    typealias Element = String
+    typealias Element = CityViewModel
 }

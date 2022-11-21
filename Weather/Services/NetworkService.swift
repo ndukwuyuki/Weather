@@ -16,8 +16,8 @@ class NetworkService {
     fileprivate init() { }
     
     func getDailyWeather(for cityName: String,
-                         completionHandler: @escaping (Forecast?, Error?) -> Void) {
-        GeolocationService.shared.getCoordinatesForCity(cityName) {[weak self] coordinate, timezone in
+                         completionHandler: @escaping (City?, Forecast?, Error?) -> Void) {
+        GeolocationService.shared.getCoordinatesForCity(cityName) {[weak self] coordinate, timezone, city in
             guard let coordinate = coordinate,
                   let timezone = timezone,
                   let url = URL(string: OpenMeteoConstants.baseURL)
@@ -36,9 +36,9 @@ class NetworkService {
                 
                 do {
                     let forecast = try Forecast(json: json)
-                    completionHandler(forecast, nil)
+                    completionHandler(city, forecast, nil)
                 } catch {
-                    completionHandler(nil, error)
+                    completionHandler(city, nil, error)
                 }
             }
             
