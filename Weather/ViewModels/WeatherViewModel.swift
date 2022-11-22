@@ -58,7 +58,7 @@ struct WeatherViewModel {
     }
     
     var weatherType: UIImage? {
-        return ImageFactory.weatherImage(for: weather.weatherType)
+        return ImageFactory.weatherImage(for: weather.weatherType, date: weather.date)
     }
     
     var temperature: String {

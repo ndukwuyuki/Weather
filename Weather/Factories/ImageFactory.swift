@@ -39,8 +39,10 @@ class ImageFactory {
         return UIImage(named: ImageNames.wind.rawValue)?.withRenderingMode(.alwaysTemplate)
     }
     
-    class func weatherImage(for weather: WeatherType) -> UIImage? {
-        return UIImage(named: weather.description)?.withRenderingMode(.alwaysTemplate)
+    class func weatherImage(for weather: WeatherType, date: Date) -> UIImage? {
+        let hour = Calendar.current.component(.hour, from: date)
+        let imageName = "\(weather.rawValue) \((hour > 18 || hour < 6) ? "night" : "day")"
+        return UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
     }
     
     class func windDirectionImage(for direction: WindDirection) -> UIImage? {

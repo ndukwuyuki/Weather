@@ -64,11 +64,13 @@ class Forecast {
             guard let maxHumidity = humidityArray[startIndex ... endIndex].max(),
                   let date = getDate(from: dateArray[index],
                                      with: Constants.dailyDateFormat,
-                                     timezoneIdentifier: timezoneIdentifier)
+                                     timezoneIdentifier: timezoneIdentifier),
+                  let initialDate = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: date)
             else { break }
+            
             let windDirection = WindDirection.getWindDirectionBy(degrees: windDirectionArray[index])
             let weatherType = WeatherType.weatherTypeBy(weathercode: weathercodeArray[index])
-            array.append(Weather(date: date,
+            array.append(Weather(date: initialDate,
                                  timezone: TimeZone(identifier: timezoneIdentifier),
                                  windDirection: windDirection,
                                  windSpeed: windSpeedArray[index],

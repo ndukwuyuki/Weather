@@ -16,13 +16,6 @@ enum WeatherType: String, Codable {
     case snow
     case fog
     
-    var description: String {
-        let date = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date)
-        return "\(rawValue) \((hour > 18 || hour < 6) ? "night" : "day")"
-    }
-    
     static func weatherTypeBy(weathercode: Int) -> WeatherType {
         switch weathercode {
         case 0: return .bright
