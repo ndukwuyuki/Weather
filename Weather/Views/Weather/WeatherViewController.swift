@@ -26,7 +26,20 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
+        configurePortraitConstraints()
         viewModel?.fetchForecast(for: "London")
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard UIDevice.current.orientation.isValidInterfaceOrientation else { return }
+        
+        if UIDevice.current.orientation.isPortrait {
+            configurePortraitConstraints()
+        } else {
+            configureLandscapeConstraints()
+        }
     }
     
     private func configureSubviews() {
@@ -46,10 +59,6 @@ class WeatherViewController: UIViewController {
         guard let selectedWeatherView = selectedWeatherView else { return }
         
         view.addSubview(selectedWeatherView)
-        selectedWeatherView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-        }
     }
     
     private func configureHourlyWeatherCollectionView() {
@@ -68,11 +77,7 @@ class WeatherViewController: UIViewController {
         guard let hourlyWeatherCollectionView = hourlyWeatherCollectionView else { return }
         
         view.addSubview(hourlyWeatherCollectionView)
-        hourlyWeatherCollectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(selectedWeatherView?.snp.bottom ?? view.snp.top)
-            make.height.equalTo(170)
-        }
+        
     }
     
     private func configureDailyWeatherTableView() {
@@ -86,10 +91,53 @@ class WeatherViewController: UIViewController {
         guard let dailyWeatherTableView = dailyWeatherTableView else { return }
         
         view.addSubview(dailyWeatherTableView)
-        dailyWeatherTableView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(hourlyWeatherCollectionView?.snp.bottom ?? view.snp.top)
+        
+    }
+    
+    private func configurePortraitConstraints() {
+        guard let selectedWeatherView = selectedWeatherView,
+              let hourlyWeatherCollectionView = hourlyWeatherCollectionView,
+              let dailyWeatherTableView = dailyWeatherTableView
+        else { return }
+        selectedWeatherView.snp.remakeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview()
         }
+        hourlyWeatherCollectionView.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(selectedWeatherView.snp.bottom)
+            make.height.equalTo(170)
+        }
+        dailyWeatherTableView.snp.remakeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(hourlyWeatherCollectionView.snp.bottom)
+        }
+        dailyWeatherTableView.layoutSubviews()
+    }
+    
+    private func configureLandscapeConstraints() {
+        guard let selectedWeatherView = selectedWeatherView,
+              let hourlyWeatherCollectionView = hourlyWeatherCollectionView,
+              let dailyWeatherTableView = dailyWeatherTableView
+        else { return }
+        selectedWeatherView.snp.remakeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(view.snp.centerX)
+            make.bottom.equalToSuperview()
+        }
+        hourlyWeatherCollectionView.snp.remakeConstraints { make in
+            make.leading.equalTo(selectedWeatherView.snp.trailing)
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
+            make.top.equalToSuperview()
+            make.height.equalTo(170)
+        }
+        dailyWeatherTableView.snp.remakeConstraints { make in
+            make.leading.trailing.equalTo(hourlyWeatherCollectionView)
+            make.top.equalTo(hourlyWeatherCollectionView.snp.bottom)
+            make.bottom.equalToSuperview()
+        }
+        dailyWeatherTableView.layoutSubviews()
     }
     
     private func bindSelectedWeather() {

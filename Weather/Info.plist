@@ -27,5 +27,11 @@
 	<string>Application needs access to your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Application needs access to your location</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
 </dict>
 </plist>
